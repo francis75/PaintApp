@@ -96,7 +96,7 @@ export class CanvasDirective implements AfterViewInit {
   makeRequest() {
     // Make a request to the server containing the user's Id and the line array.
     this.http
-      .post('https://localhost:8080/draw', {
+      .post('https://my-paint-app.herokuapp.com/draw', {
         line: this.line,
         userId: this.userId,
       })

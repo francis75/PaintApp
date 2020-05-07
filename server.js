@@ -5,7 +5,7 @@ const express = require('express');
 const path = require('path');
 const bodyParser = require('body-parser');
 const Pusher = require('pusher');
-
+const port = process.env.PORT || 8080;
 const app = express();
 const pusher = new Pusher({
   appId: process.env.PUSHER_APP_ID,
@@ -36,4 +36,6 @@ app.post('/draw', (req, res) => {
     res.json(req.body);
   });
 
-app.listen(process.env.PORT || 8080);
+app.listen(port, () => {
+  console.log(`Server is up on port ${port}`);
+});
