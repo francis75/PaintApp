@@ -2,6 +2,7 @@
 
 require('dotenv').config();
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const Pusher = require('pusher');
 
@@ -11,6 +12,12 @@ const pusher = new Pusher({
   key: process.env.PUSHER_KEY,
   secret: process.env.PUSHER_SECRET,
   cluster: 'us2',
+});
+// Serve only the static files form the dist directory
+app.use(express.static(__dirname + '/dist'));
+app.get('/*', function(req,res) {
+    
+  res.sendFile(path.join(__dirname+'/dist/index.html'));
 });
 
 app.use(bodyParser.json());
