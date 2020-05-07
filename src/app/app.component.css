@@ -1,0 +1,24 @@
+.main {
+    display: flex;
+    justify-content: center;
+    font-family: 'Arimo', sans-serif;
+  }
+  .color-guide {
+    margin: 20px 40px;
+  }
+  h5{
+    margin-bottom: 10px;
+  }
+  .user {
+    padding: 7px 15px;
+    border-radius: 4px;
+    color: white;
+    font-size: 13px;
+    font-weight: bold;
+    background: #0835c7;
+    margin: 10px 0;
+  }
+  .guest {
+    background: #cd5334;
+    color: white;
+  }
