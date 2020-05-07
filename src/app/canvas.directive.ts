@@ -55,6 +55,14 @@ export class CanvasDirective implements AfterViewInit {
   
   @HostListener('touchstart', ['$event'])
   @HostListener('mousedown', ['$event'])
+  ontouchstart({ offsetX, offsetY }) {
+    this.isPainting = true;
+    // Get the offsetX and offsetY properties of the event. 
+    this.prevPos = {
+      offsetX,
+      offsetY,
+    };
+  }
   onMouseDown({ offsetX, offsetY }) {
     this.isPainting = true;
     // Get the offsetX and offsetY properties of the event. 
@@ -63,8 +71,29 @@ export class CanvasDirective implements AfterViewInit {
       offsetY,
     };
   }
-  @HostListener('mousemove', ['$event'])
+  
   @HostListener('touchmove', ['$event'])
+  @HostListener('mousemove', ['$event'])
+  ontouchmove(event) {
+    if (this.isPainting) {
+      if (event.touches){
+        let offsetX = event.touches[0].clientX;
+        let offsetY = event.touches[0].clientY;
+        const offSetData = { offsetX, offsetY };
+        
+        // Set the start and stop position of the paint event. 
+        this.position = {
+          start: { ...this.prevPos },
+          stop: { ...offSetData },
+        };
+
+        // Add the position to the line array
+        this.line = this.line.concat(this.position);
+        this.draw(this.prevPos, offSetData, this.userStrokeStyle);
+      }
+      
+    }
+  }
   onMouseMove({ offsetX, offsetY }) {
     if (this.isPainting) {
       const offSetData = { offsetX, offsetY };
@@ -78,8 +107,10 @@ export class CanvasDirective implements AfterViewInit {
       this.draw(this.prevPos, offSetData, this.userStrokeStyle);
     }
   }
+
+  @HostListener('touchend', ['$event'])
+  @HostListener('touchcancel', ['$event'])
   @HostListener('mouseup')
-  @HostListener('touchend')
   onMouseUp() {
     if (this.isPainting) {
       this.isPainting = false;
