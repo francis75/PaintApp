@@ -52,7 +52,8 @@ export class CanvasDirective implements AfterViewInit {
   };
   // This will be set to true when a user starts painting
   isPainting = false;
-
+  
+  @HostListener('touchstart', ['$event'])
   @HostListener('mousedown', ['$event'])
   onMouseDown({ offsetX, offsetY }) {
     this.isPainting = true;
@@ -63,6 +64,7 @@ export class CanvasDirective implements AfterViewInit {
     };
   }
   @HostListener('mousemove', ['$event'])
+  @HostListener('touchmove', ['$event'])
   onMouseMove({ offsetX, offsetY }) {
     if (this.isPainting) {
       const offSetData = { offsetX, offsetY };
@@ -77,6 +79,7 @@ export class CanvasDirective implements AfterViewInit {
     }
   }
   @HostListener('mouseup')
+  @HostListener('touchend')
   onMouseUp() {
     if (this.isPainting) {
       this.isPainting = false;
