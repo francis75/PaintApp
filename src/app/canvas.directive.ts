@@ -24,8 +24,8 @@ export class CanvasDirective implements AfterViewInit {
   ) {
     // We use the ElementRef to get direct access to the canvas element. Here we set up the properties of the element. 
     this.canvas = this.el.nativeElement;
-    this.canvas.width = 800;
-    this.canvas.height = 600;
+    this.canvas.width = 1024;
+    this.canvas.height = 768;
     // We create a canvas context. 
     this.ctx = this.canvas.getContext('2d');
     this.ctx.lineJoin = 'round';
@@ -57,8 +57,16 @@ export class CanvasDirective implements AfterViewInit {
   ontouchstart(event: any) {
     this.isPainting = true;
     // Get the offsetX and offsetY properties of the event. 
-    let offsetX = event.touches[0].clientX;
-    let offsetY = event.touches[0].clientY;
+    if (event) {
+      event.preventDefault();
+    }
+    var rect = this.canvas.getBoundingClientRect();
+    console.log(rect);
+
+    let offsetY = event.touches[0].clientY - rect.top;
+    let offsetX = event.touches[0].clientX - rect.left;
+    // let offsetX = event.touches[0].clientX;
+    // let offsetY = event.touches[0].clientY;
     this.prevPos = {
       offsetX,
       offsetY
@@ -70,9 +78,14 @@ export class CanvasDirective implements AfterViewInit {
 
   @HostListener('touchmove', ['$event'])
   onTouchMove(event: any) {
+    if (event) {
+      event.preventDefault();
+    }
+
     if (this.isPainting) {
-      let offsetX = event.touches ? event.touches[0].clientX : event.clientX;
-      let offsetY = event.touches ? event.touches[0].clientY : event.clientY;
+      var rect = this.canvas.getBoundingClientRect();
+      let offsetY = event.touches[0].clientY - rect.top;
+      let offsetX = event.touches[0].clientX - rect.left;
       const offSetData = { offsetX, offsetY };
       this.position = {
         start: { ...this.prevPos },
@@ -118,6 +131,7 @@ export class CanvasDirective implements AfterViewInit {
       offsetX,
       offsetY,
     };
+    console.log("onmousedown");
   }
   
   @HostListener('mousemove', ['$event'])
